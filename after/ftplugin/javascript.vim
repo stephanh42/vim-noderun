@@ -2,12 +2,18 @@
 " Language:     JavaScript
 " Maintainer:   Stephan Houben
 
+if !exists('g:node_executable')
+  let g:node_executable = 'node'
+endif
+
 if !exists('*NodeRun')
   function NodeRun()
     let filename = expand('%:p')
     let name = substitute(expand('%:t:r'), '-', '_', 'g')
     let command = "const " . name . " = require('" . escape(filename, ' \') . "');"
-    return term_start(["node", "-e", command, "-i"], {"term_finish": "close"})
+    return term_start([g:node_executable, "-e", command, "-i"], 
+      \{"term_finish": "close", "term_name": g:node_executable . " " . name,
+      \"term_kill": "term"})
   endfunction
 
   command NODERUN call NodeRun()
