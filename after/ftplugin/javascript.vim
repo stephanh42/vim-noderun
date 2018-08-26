@@ -11,7 +11,8 @@ if !exists('*NodeRun')
     let filename = expand('%:p')
     let name = substitute(expand('%:t:r'), '-', '_', 'g')
     let command = "const " . name . " = require('" . escape(filename, ' \') . "');"
-    return term_start([g:node_executable, "--use_strict", "-e", command, "-i"], 
+    let $NODE_REPL_MODE = "strict"
+    return term_start([g:node_executable, "-e", command, "-i"], 
       \{"term_finish": "close", "term_name": g:node_executable . " " . name,
       \"term_kill": "term"})
   endfunction
